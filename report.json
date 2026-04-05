@@ -1,0 +1,22 @@
+{
+  "high_achievers": [
+    {
+      "id": "1001",
+      "name": "Alice",
+      "average": 90.5
+    },
+    {
+      "id": "1003",
+      "name": "Charlie",
+      "average": 93.25
+    }
+  ],
+  "average_performers": [
+    {
+      "id": "1002",
+      "name": "Bob",
+      "average": 81.25
+    }
+  ],
+  "needs_support": []
+}
