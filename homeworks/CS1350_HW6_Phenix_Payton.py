@@ -5,10 +5,11 @@
 
 
 """Week 11 Lecture 1: Grouping, Capturing, Alternation, and Match Objects"""
-## -----UNIT 1: Grouping and Capturing-----
+## ---UNIT 1: Grouping and Capturing---
 import re
 
 # Beginner — Extract Name and Age
+print("---UNIT 1: Grouping and Capturing---")
 print("Beginner — Extract Name and Age")
 texts = [
     "Alice is 20 years old",
@@ -57,10 +58,12 @@ for entry in log_entries:
     if match:
         d = match.groupdict()
         print(f"{d['message']} on {d['month']}/{d['day']}/{d['year']} at {d['hour']}:{d['minute']}:{d['second']}")
+print()
 
 
-## ----Unit 2: Match Object Deep Dive----
+## ---Unit 2: Match Object Deep Dive---
 # Beginner — Match Positions
+print("---Unit 2: Match Object Deep Dive---")
 print("Beginner — Match Positions")
 text = "The price is $49.99 today"
 match = re.search(r"\$\d+\.\d{2}", text)
@@ -125,6 +128,7 @@ print()
 
 ## Unit 3: Alternation
 # Beginner — Match Greetings
+print("---Unit 3: Alternation---")
 print("Beginner — Match Greetings")
 texts = [
 "Hello there!",
@@ -209,657 +213,226 @@ for date in dates:
 print()
 
 
-"""Week 12 Lecture 2: Advanced File Processing"""
-## UNIT 1: Working with File Formats
-# Exercise 1.1: Beginner — Text to CSV Converter
-def practice_1_beginner():
-    """
-    Beginner: Convert text to CSV
-    """
-    print("\n" + "=" * 50)
-    print("EXERCISE 1.1: Text to CSV Converter")
-    print("=" * 50)
 
-    # Create a text file with data
-    with open("employees.txt", "w") as employees:
-        employees.write("John Smith 35 Engineer\n")
-        employees.write("Jane Doe 28 Designer\n")
-        employees.write("Bob Johnson 42 Manager\n")
-        
-    # TODO 1: Read text file and convert to CSV
-    with open("employees.txt", "r") as employees:
-        with open("employees.csv", "w") as employees_csv:
-            # Write CSV header
-            employees_csv.write("First,Last,Age,Job\n")
-            
-            # TODO: Read each line and convert
-            for line in employees:
-                parts = line.strip().split()
-                # parts[0] = first name, parts[1] = last name, etc.
+"""Week 12 Lecture 2 Exercises: Core re Functions, Compilation, and Efficiency"""
+## Unit 1: re.match() and re.findall()
+## Beginner match vs. search
+print("---Unit 1: re.match() and re.findall()---")
+print("Beginner — match vs. search")
+import re
 
-                # TODO: Write as CSV line
-                # Format: John,Smith,35,Engineer
-                csv_line = f"{parts[0]},{parts[1]},{parts[2]},{parts[3]}"
-                employees_csv.write(csv_line + "\n")
+texts = ["Python is great", "I love Python", "PYTHON", "python3"]
 
-    # TODO 2: Read and verify CSV
-    print("\nCSV Contents:")
-    with open("employees.csv", "r") as employees_csv:
-        # TODO: Read and display
-        for line in employees_csv:
-            print(line.strip())
-
-# Run the exercise
-practice_1_beginner()
+for text in texts:
+    # TODO 1: Use re.match to check if text starts with "Python"
+    m = re.match(r"Python", text)
+    
+    # TODO 2: Use re.search to check if text contains "Python" anywhere
+    s = re.search(r"Python", text)
+    
+    starts = "yes" if m else "no"
+    contains = "yes" if s else "no"
+    print(f"'{text}' — starts with Python: {starts}, contains Python: {contains}")
 print()
 
 
-## Exercise 1.2: Intermediate — CSV Grade Calculator
-def practice_1_intermediate():
-    """
-    Intermediate: Process CSV data
-    """
-    print("\n" + "=" * 50)
-    print("EXERCISE 1.2: Grade Calculator")
-    print("=" * 50)
-    
-    # Create grades CSV
-    with open("grades.csv", "w") as grades:
-        grades.write("Student,Math,Science,English\n")
-        grades.write("Alice,95,87,92\n")
-        grades.write("Bob,78,85,88\n")
-        grades.write("Charlie,92,94,85\n")
-        grades.write("Diana,88,91,95\n")
-   
-    # TODO 1: Read CSV and calculate averages
-    with open("grades.csv", "r") as grades:
-        header = grades.readline().strip().split(",")
-        print(f"Subjects: {header[1:]}")
+## Intermediate — Extract All Data
+print("Intermediate — Extract All Data")
 
-        student_averages = []
+text = """
+Student grades: Alice-92, Bob-78, Charlie-85, Diana-95.
+Room numbers: A101, B204, C310.
+Emails: alice@school.edu, bob@school.edu.
+"""
 
-        for line in grades:
-            parts = line.strip().split(",")
-            name = parts[0]
-        
-            # TODO: Convert grades to numbers
-            scores = [int(x) for x in parts[1:]]
-            
-            # TODO: Calculate average
-            average = sum(scores) / len(scores)
-        
-            student_averages.append((name, average))
-            print(f"{name}: {average:.1f}")
-    
-    # TODO 2: Save results to new CSV
-    with open("averages.csv", "w") as averages:
-        averages.write("Student,Average\n")
-        
-        # TODO: Write each student's average
-        for name, avg in student_averages:
-            averages.write(f"{name},{avg:.1f}\n")
+# TODO 1: Find all names followed by scores (Name-Score)
+name_scores = re.findall(r"\w+-\d{2}", text)
+print(f"Scores: {name_scores}")
 
-# Run the exercise
-practice_1_intermediate()
+# TODO 2: Find all room numbers (letter + 3 digits)
+rooms = re.findall(r"\w{1}\d{3}", text)
+print(f"Rooms: {rooms}")
+
+# TODO 3: Find all email addresses
+emails = re.findall(r"\w+@\w+\.\w+", text)
+print(f"Emails: {emails}")
 print()
 
 
-## Exercise 1.3: Advanced — JSON Database
-def practice_1_advanced():
-    """
-    Advanced: JSON database system
-    """
-    print("\n" + "=" * 50)
-    print("EXERCISE 1.3: JSON Database")
-    print("=" * 50)
+## Advanced — CSV Field Extractor
+print("Advanced — CSV Field Extractor")
+csv_lines = [
+"Alice,Smith,25,Engineer,alice@corp.com",
+"Bob,Jones,30,Designer,bob@corp.com",
+"Carol,White,28,Manager,carol@corp.com",
+]
 
-    import json
-
-    # TODO 1: Create a product database in JSON
-    products = {
-        "inventory": [
-            {"id": 1, "name": "Laptop", "price": 999.99, "stock": 5},
-            {"id": 2, "name": "Mouse", "price": 29.99, "stock": 15},
-            {"id": 3, "name": "Keyboard", "price": 79.99, "stock": 8}
-        ],
-        "last_updated": "2024-01-15",
-        "store": "Tech Store"
-    }
+for line in csv_lines:
+    # TODO 1: Use re.match with groups to extract all 5 fields
+    # Pattern should match: word,word,digits,word,email
+    match = re.match(r"(?P<first>\w+),(?P<last>\w+),(?P<age>\d+),(?P<role>\w+),(?P<email>\w+@\w+\.\w+)", line)
     
-    # TODO: Save to JSON file
-    with open("products.json", "w") as productdb:
-        json.dump(products, productdb, indent=4)
-    
-    print("Product database created")
-    
-    # TODO 2: Load and modify JSON — add a new product
-    new_product = {
-        "id": 4,
-        "name": "Monitor",
-        "price": 299.99,
-        "stock": 3
-    }
-    # TODO: Add to inventory
-    with open("products.json", "r") as productdb:
-        data = json.load(productdb)
-    
-    data["inventory"].append(new_product)
-    
-    # TODO 3: Update stock levels
-
-    for item in data["inventory"]:
-        if item["id"]  == 2:    # Mouse
-            
-            item["stock"] += 5
-        if item["id"] == 3:     # Keyboard
-            
-            item["stock"] -= 2
-            
-    # TODO 4: Save updated data
-    with open("products.json", "w") as f:
-        json.dump(data, f, indent=4)
-
-    # TODO 5: Generate report from JSON
-    
-    with open("products.json", "r") as f:
-        report_data = json.load(f)
-    
-    print("\n--- PRODUCT INVENTORY REPORT ----")
-    print(f"Store: {report_data['store']}")
-    print(f"Last Updated: {report_data['last_updated']}\n")
-    
-    print(f"{'ID':<5} {'Name':<15} {'Price':<10} {item['stock']:<10}")
-    print("-" * 40)
-    
-    for item in report_data["inventory"]:
-        print(f"{item['id']:<5} {item['name']:<15} ${item['price']:<10} {item['stock']:<10}")
-    
-    print("\nReport Generated Successfully")
-    
-    
-
-# Run the exercise
-practice_1_advanced()
-
-
-## Exercise 2.1: Beginner — JSON Contact Card
-def practice_2_beginner():
-    """
-    Beginner: Basic JSON operations
-    """
-    print("\n" + "=" * 50)
-    print("EXERCISE 2.1: JSON Contact Card")
-    print("=" * 50)
-    
-    import json
-    
-    # TODO 1: Create a contact dictionary
-    contact = {
-    "name": "John Doe",
-    "email": "john@example.com",
-    "phone": "555-1234",
-    "age": 25
-    }
-
-    # TODO 2: Convert to JSON string
-    json_str = json.dumps(contact) # Replace with json.dumps(contact)
-    print(f"JSON String: {json_str}")
-    
-    # TODO 3: Save to file
-    with open("contact.json", "w") as f:
-        # TODO: Use json.dump to save contact
-        json.dump(contact, f, indent=2)
-    
-    print("Contact saved to file")
-    
-    # TODO 4: Load from file
-    with open("contact.json", "r") as f:
-        loaded_contact = json.load(f)
-    
-    # TODO 5: Access data
-    print(f"\nLoaded contact:")
-    print(f"Name: {loaded_contact['name']}")
-    print(f"Email: {loaded_contact['email']}")
-
-# Run the exercise
-practice_2_beginner()
+    if match:
+        first, last, age, role, email = match.groups()
+        # TODO 2: Validate that age is between 18 and 65
+        age_num = int(age)
+        valid_age = 18 <= age_num <= 65
+        
+        # TODO 3: Print formatted output
+        status = "✅" if valid_age else "⚠ age"
+        print(f"{status} {first} {last} ({age}), {role}, {email}")
 print()
 
 
-## Exercise 2.2: Intermediate — Settings Manager
-def practice_2_intermediate():
-    """
-    Intermediate: Application settings in JSON
-    """
-    print("\n" + "=" * 50)
-    print("EXERCISE 2.2: Settings Manager")
-    print("=" * 50)
-    
-    import json
-    
-    # Default settings
-    default_settings = {
-        "app_name": "My App",
-        "version": "1.0.0",
-        "user_preferences": {
-            "theme": "dark",
-            "font_size": 12,
-            "auto_save": True
-            },
-        "recent_files": [],
-        "window_size": [800, 600]
-    }
-    
-    # TODO 1: Save default settings with nice formatting
-    with open("settings.json", "w") as settings_json:
-        json.dump(default_settings, settings_json, indent=2)
-    
-    print("Default settings created")
-    
-    # TODO 2: Load and modify settings
-    # Change theme to "light", add a file to recent_files, etc.
-    with open("settings.json", "r") as f:
-        settings_load = json.load(f)
-    
-    settings_load['user_preferences']['theme'] = "Light"
-    settings_load['recent_files'].append("document.txt")
-    
-    # TODO 3: Save updated settings
-    with open("settings.json", "w") as settings_json:
-        json.dump(settings_load, settings_json, indent=2)
-    
-    # TODO 4: Create backup
-    with open("settings.json", "r") as settings_json:
-        settings_load = json.load(settings_json)
-    
-    with open("settings_backup.json", "w") as settings_backup:
-        json.dump(settings_load, settings_backup, indent=2)
-    
-    print("Settings backed up")
+## Unit 2: re.finditer() and re.sub()
+## Beginner — Simple Substitution
+print("---Unit 2: re.finditer() and re.sub()---")
+print("Beginner — Simple Substitution")
+text = "The cat sat on the mat near the bat"
 
-# Run the exercise
-practice_2_intermediate()
+# TODO 1: Replace all 3-letter words ending in "at" with "___"
+result = re.sub(r"\b\w{3}\b","___", text)
+print(result)
+
+# TODO 2: Replace only the first occurrence
+result2 = re.sub(r"\b\w{3}\b","___", text, count=1) # Hint: use count=1
+print(result2)
 print()
 
 
-## Exercise 2.3: Advanced — Student Database
-def practice_2_advanced():
-    """
-    Advanced: Mini database with JSON
-    """
-    print("\n" + "=" * 50)
-    print("EXERCISE 2.3: Student Database")
-    print("=" * 50)
-    
-    import json
-    
-    # TODO 1: Create database structure
-    database = {
-        "students": {}
-    }
-    
-    # TODO 2: Add students function
-    def add_student(db, student_id, name, grades):
-        db["students"][student_id] = {
-            "name": name,
-            "grades": grades
-        }
-    
-    # Add sample students
-    add_student(database, 1001, "Alice", [95, 87, 92, 88])
-    add_student(database, 1002, "Bob", [78, 85, 80, 82])
-    add_student(database, 1003, "Charlie", [92, 94, 96, 91])
-    
-    # TODO 3: Save database to student_db.json
-    with open("student_db.json", "w") as f:
-        json.dump(database, f, indent=2)
-    print("Database created")
-    
-    # TODO 4: Query function
-    def find_student(db_file, student_id):
-        with open(db_file, 'r') as f:
-            data = json.load(f)
-        
-        return data["students"].get(student_id)
-    
-    # Test query
-    result = find_student("student_db.json", 1001)
-    if result:
-        print(f"\nFound: {result['name']}")
-    
-    # TODO 5: Generate report
-    # Read database, categorize students as "high_achievers" or "needs_support"
-    # Save report to report.json
-    with open("student_db.json", "r") as f:
-        data = json.load(f)
-    
-    report = {
-        "high_achievers": [],
-        "average_performers": [],
-        "needs_support": []
-    }
+## Intermediate — Data Reformatter
+print("Intermediate — Data Reformatter")
+# Reformat phone numbers from various formats to (XXX) XXX-XXXX
+phones = [
+"555-123-4567",
+"555.123.4567",
+"5551234567",
+]
 
-    for sid, info in data["students"].items():
-        avg = sum(info["grades"]) / len(info["grades"])
-        
-        entry = {
-            "id": sid,
-            "name": info["name"],
-            "average": avg
-        }
-
-        if avg >= 90:
-            report["high_achievers"].append(entry)
-        elif avg < 70:
-            report["needs_support"].append(entry)
-        else:
-            report["average_performers"].append(entry)
+for phone in phones:
+    # TODO 1: First normalize — remove all non-digits
+    digits = re.sub(r"\D+", "", phone)
     
-    with open("report.json", "w") as f:
-        json.dump(report, f, indent=2)
-    print("Report Generated")
-
-# Run the exercise
-practice_2_advanced()
+    # TODO 2: Use re.sub with groups to reformat
+    formatted = re.sub(r"(\d{3})(\d{3})(\d{4})", r"(\1) \2-\3", digits)
+    print(f"{phone:<15} → {formatted}")
 print()
 
 
-## UNIT 3: Pickle, File Paths, and File System Operations
-# Exercise 3.1: Beginner — Pickle Basics and Project Structure
-def practice_3_beginner():
-    """
-    Beginner: Basic pickle operations and directory creation
-    """
+## Advanced — Highlight with finditer
+print("Advanced — Highlight with finditer")
 
-    print("\n" + "=" * 50)
-    print("EXERCISE 3.1: Pickle & Project Setup")
-    print("=" * 50)
-    
-    import pickle
-    import os
-    
-    # --- Part A: Pickle ---
-    # TODO 1: Create a list to pickle
-    shopping_list = ["Apples", "Bananas", "Milk", "Bread"]
+text = "Python was created in 1991. Version 3.0 came in 2008. Now it's 2026."
 
-    # TODO 2: Save with pickle
-    with open("shopping.pkl", "wb") as f:
-        # TODO: Use pickle.dump
-        pickle.dump(shopping_list, f)
+# TODO 1: Use finditer to find all 4-digit years
+# For each year, print the year and its context (10 chars before and after)
+for match in re.finditer(r"\d{4}", text):
+    start, end = match.span()
+    ctx_start = max(0, start - 10)
+    ctx_end = min(len(text), end + 10)
+    context = text[ctx_start:ctx_end]
+    # TODO: Print the year, position, and context
+    print(f"Important year: {match.group()} | Context: {context} | Position: {start}-{end}")
 
-    print("Shopping list pickled!")
+# TODO 2: Use re.sub with a function to add 100 to every number in the text
+def add_100(match):
+    return str(int(match.group()) + 100)
 
-    # TODO 3: Load with pickle
-    with open("shopping.pkl", "rb") as f:
-        loaded_list = pickle.load(f)
-        print(f"Loaded list: {loaded_list}")
-
-    # TODO 4: Add items and re-save
-    loaded_list.append("Eggs")
-    loaded_list.append("Cheese")
-    with open("shopping.pkl", "wb") as f:
-        # TODO: Save updated list
-        pickle.dump(loaded_list, f)
-    print("Updated list saved")
-
-    # --- Part B: Directory Structure ---
-    
-    # TODO 5: Create project directory
-    project_name = "my_project"
-    if not os.path.exists(project_name):
-        # TODO: Create the directory
-        os.mkdir(project_name)
-
-    # TODO 6: Create subdirectories
-    subdirs = ["src", "docs", "tests", "data"]
-    for subdir in subdirs:
-        path = os.path.join(project_name, subdir)
-        # TODO: Create each subdirectory
-        if not os.path.exists(path):
-            os.mkdir(path)
-
-    # TODO 7: Create initial files (README.md, main.py in src)
-    readme_path = os.path.join(project_name, "README.md")
-    with open(readme_path, "w") as f:
-        f.write("# My Project\n\nMy Project README.md")
-    
-    main_path = os.path.join(project_name, "src", "main.py")
-    with open(main_path, "w") as f:
-        f.write("def main():\n")
-        f.write("   print('Hello from main.py!')\n\n")
-        f.write("main()")
-    
-    # TODO 8: List project structure
-    print("\nProject structure:")
-    for root, dirs, files in os.walk(project_name):
-        level = root.replace(project_name, "").count(os.sep)
-        indent = "  " * level
-        print(f"{indent}{os.path.basename(root)}/")
-        for file in files:
-            print(f"{indent}  {file}")
-
-# Run the exercise
-practice_3_beginner()
-
-
-# Exercise 3.2: Intermediate — File Organizer
-def practice_3_intermediate():
-    """
-    Intermediate: Organize files by type
-    """
-    print("\n" + "=" * 50)
-    print("EXERCISE 3.2: File Organizer")
-    print("=" * 50)
-
-    import os
-    import shutil
-    
-    messy_folder = "messy_files"
-    # TODO: Setup — Create messy folder with test files
-    if not os.path.exists(messy_folder):
-        os.mkdir(messy_folder)
-    test_files = [
-    "document.txt", "image.jpg", "photo.png",
-    "report.pdf", "script.py", "data.csv",
-    "music.mp3", "video.mp4", "archive.zip"
-    ]
-    
-    # TODO: Create each file in messy_folder
-    for file in test_files:
-        file_path = os.path.join(messy_folder, file)
-        with open(file_path, "w") as f:
-            f.write(f"Test file: {file}")
-    
-    # Category mapping
-    organized = {
-        "documents": [".txt", ".pdf", ".doc"],
-        "images": [".jpg", ".png", ".gif"],
-        "code": [".py", ".js", ".html"],
-        "data": [".csv", ".json", ".xml"],
-        "media": [".mp3", ".mp4", ".avi"],
-        "archives": [".zip", ".tar", ".rar"]
-    }
-    
-    # TODO: Create organized folders for each category
-    for cat in organized.keys():
-        cat_path = os.path.join(messy_folder, cat)
-        if not os.path.exists(cat_path):
-            os.mkdir(cat_path)
-    
-    # TODO: Organize files
-    # Iterate through messy_folder
-    # Get file extension
-    for file in os.listdir(messy_folder):
-        file_path = os.path.join(messy_folder, file)
-        
-        # Skip directories
-        if os.path.isdir(file_path):
-            continue
-        
-        # Get file Extension
-        name, ext = os.path.splitext(file)
-        ext = ext.lower()
-        
-        # Find matching folder
-        # Move file to appropriate folder
-#        for category, extensions in organized.items():             Block Commented out
-#            if ext in extensions:                                  Errors due to files already moved
-#                dest_folder = os.path.join(messy_folder, category) UNCOMMENT WHEN FINISHED
-#                shutil.move(file_path, dest_folder)
-#                print(f"Moved {file} --> {category}/")
-    
-    # TODO: Show organized structure
-    for root, dirs, files in os.walk(messy_folder):
-        level = root.replace(messy_folder, "").count(os.sep)
-        indent = "  " * level
-        print(f"{indent}{os.path.basename(root)}/")
-        for file in files:
-            print(f"{indent} {file}")
-
-# Run the exercise
-practice_3_intermediate()
+result = re.sub(r"\d{4}", add_100, text)
+print(f"\nAfter adding 100: {result}")
 print()
 
-# Exercise 3.3: Advanced — Game Save System with Backup
-# TODO 1: Create game state class  ## Error occured when class was inside practice_3_advanced() function. Moved outside to fix it
-class GameState:
-    def __init__(self):
-        self.player_name = ""
-        self.level = 1
-        self.score = 0
-        self.inventory = []
-        self.position = (0, 0)
-        
-    def __str__(self):
-        return f"{self.player_name} - Level {self.level}, Score: {self.score}"
 
-def practice_3_advanced():
+## ---Unit 3: Compilation, Pattern Libraries, and Efficiency---
+## Beginner — Compile and Reuse
+print("---Unit 3: Compilation, Pattern Libraries, and Efficiency---")
+print("Beginner — Compile and Reuse")
+
+# TODO 1: Compile a pattern to find words starting with a capital letter
+cap_word = re.compile(r"[A-Z]\w+")
+
+texts = [
+"Alice met Bob in Paris",
+"the quick brown Fox",
+"No Capitals at the End except Here",
+]
+
+for text in texts:
+    # TODO 2: Use the compiled pattern's findall method
+    matches = cap_word.findall(text)
+    print(f"Capitalized words: {matches}")
+print()
+
+
+## Intermediate — Verbose Pattern
+print("Intermediate — Verbose Pattern")
+
+# TODO: Rewrite this pattern using re.VERBOSE with comments
+# Original: r"^(\d{2})/(\d{2})/(\d{4})$"
+
+date_pattern = re.compile(r"""
+    # TODO: Add the pattern with comments explaining each part
+    ^           # Start of string
+    (\d{2})     # Two digits for month
+    /           # Literal slash
+    (\d{2})     # Two digits for day
+    /           # Literal slash
+    (\d{4})     # Four digits for year
+    $           # End of string
+""", re.VERBOSE)
+
+tests = ["03/15/2026", "3/15/2026", "03-15-2026", "12/25/2025"]
+for t in tests:
+    match = date_pattern.match(t)
+    if match:
+        print(f"✅ {t} → month={match.group(1)}, day={match.group(2)}, year= {match.group(3)}")
+    else:
+        print(f"❌ {t}")
+print()
+
+
+## Advanced — Mini Validation Library
+print("Advanced — Mini Validation Library")
+
+class Validator:
     """
-    Advanced: Complex object serialization and backup system
+    Build a validation library with compiled patterns.
+    Each method should return True/False.
     """
-    print("\n" + "=" * 50)
-    print("EXERCISE 3.3: Game Save System")
-    print("=" * 50)
+    # TODO 1: Compile patterns as class attributes
+    _email = re.compile(r"\w+@\w+\.\w+", re.IGNORECASE)
+    _phone = re.compile(r"(\d{3})(-)?(\d{3})(-)?(\d{4})")
+    _zip = re.compile(r"\d{5}(-\d{4})?") # Compile pattern for 5-digit ZIP, optional -XXXX
+    _date = re.compile(r"\d{4}-\d{2}-\d{2}") # Compile pattern for YYYY-MM-DD
 
-    import pickle
-    import os
-    import shutil
-    from datetime import datetime
-    from pathlib import Path
+    @classmethod
+    def is_email(cls, text):
+        return cls._email.match(text) is not None
 
-    # TODO 2: Create and populate a game state
-    game = GameState()
-    game.player_name = "Hero"
-    game.level = 5
-    game.score = 1250
-    game.inventory = ["Sword", "Shield", "Potion"]
-    game.position = (10, 25)
-    
-    # TODO 3: Create saves directory and save game with pickle
-    saves_dir = Path("saves")
-    saves_dir.mkdir(exist_ok=True)
-    
-    save_path = saves_dir / "save1.pkl"
-    
-    with open(save_path, "wb") as f:
-        pickle.dump(game, f)
-    print(f"Game saved to {save_path}")
-    
-    # TODO 4: Load and verify saved game
-    # Print player name, level, score, inventory, position
-    with open(save_path, "rb") as f:
-        loaded_game = pickle.load(f)
-    
-    print("Loaded Game:")
-    print(f"  Name:{loaded_game.player_name}")
-    print(f"  Level:{loaded_game.level}")
-    print(f"  Score:{loaded_game.score}")
-    print(f"  Inventory:{loaded_game.inventory}")
-    print(f"  Position:{loaded_game.position}")
-    
-    # TODO 5: Implement multiple save slots
-    def save_game(game_state, slot_number):
-        """Save game to a specific slot"""
-        saves_dir = Path("saves")
-        saves_dir.mkdir(exist_ok=True)
-        
-        filename = f"slot_{slot_number}.pkl"
-        save_path = saves_dir / filename
-        
-        with open(save_path, "wb") as f:
-            pickle.dump(game_state, f)
-        print(f"Saved to {filename}")
+    @classmethod
+    def is_phone(cls, text):
+        return cls._phone.match(text) is not None
 
-    # TODO 6: List all save files
-    def list_saves():
-        saves_dir = Path("saves")
-        if not saves_dir.exists():
-            print("No saves directory found.")
-            return
-        
-        saves = sorted(saves_dir.glob("*.pkl"))
-        if not saves:
-            print("No save files found.")
-            return
+    @classmethod
+    def is_zip(cls, text):
+        return cls._zip.match(text) is not None
 
-        print("Available Saves:")
-        for save in saves:
-            print(f" - {save}")
-    # TODO 7: Create backup function
-    def create_backup(source_dir, backup_dir="backups"):
-        """Create timestamped backup of source directory"""
-        # Create backup directory
-        source = Path(source_dir)
-        backup_root = Path(backup_dir)
-        backup_root.mkdir(exist_ok=True)
-        
-        # Create timestamp-based folder name
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        backup_path = backup_root / f"backup_{timestamp}"
-        
-        # Copy entire directory
-        shutil.copytree(source, backup_path)
-        print(f"Backup created at {backup_path}")
-        return backup_path
-    
-    # TODO 8: Verify backup
-    def verify_backup(source, backup):
-        """Check all files in source are also in backup"""
-        source = Path(source)
-        backup = Path(backup)
-        
-        source_files = sorted([p.relative_to(source) for p in source.rglob("*") if p.is_file()])
-        backup_files = sorted([p.relative_to(source) for p in source.rglob("*") if p.is_file()])
-        
-        if source_files == backup_files:
-            print("Backup verification successful - all files match.")
-            return True
-        else:
-            print("Backup verification FAILED - file mismatch detected.")
-            return False
-            
-    # TODO 9: Cleanup old backups (keep only most recent N)
-    def cleanup_old_backups(backup_dir, keep_count=3):
-        # Get all backups sorted by modification time
-        backup_root = Path(backup_dir)
-        if not backup_root.exists():
-            print("No backups to clean.")
-            return
-        
-        backups = sorted(
-            [p for p in backup_root.iterdir() if p.is_dir()],
-            key=lambda p: p.stat().st_mtime,
-            reverse=True
-        )
-        
-        # Keep only the most recent ones
-        to_delete = backups[keep_count:]
-        
-        for folder in to_delete:
-            shutil.rmtree(folder)
-            print(f"Deleted old backup: {folder.name}")
-        
-        print("Backup cleanup complete.")
-        
-# Run the exercise
-practice_3_advanced()
+    @classmethod
+    def is_date(cls, text):
+        return cls._date.match(text) is not None
+
+# Test suite
+tests = {
+"is_email": ["alice@example.com", "not-an-email", "bob@site.org"],
+"is_phone": ["555-123-4567", "5551234567", "55-123-4567"],
+"is_zip": ["46802", "46802-1234", "4680", "ABCDE"],
+"is_date": ["2026-03-15", "03/15/2026", "2026-13-01"],
+}
+
+for method_name, cases in tests.items():
+    method = getattr(Validator, method_name)
+    print(f"\n{method_name}:")
+    for case in cases:
+        result = method(case)
+        icon = "✅" if result else "❌"
+        print(f" {icon} {case}")
